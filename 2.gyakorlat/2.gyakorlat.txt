@@ -1,0 +1,49 @@
+Homogén kordináta rendszer
+https://www.uni-miskolc.hu/~matip/grafika/pages/topics/01_Coordinates.html#homogen-koordinatarendszer
+
+két ponton áthaladó egyenes kiszámítása
+https://www.uni-miskolc.hu/~matip/grafika/pages/topics/01_Coordinates.html#ket-ponton-athalado-egyenes
+
+Transzformációk
+Forgassuk el a p(8,14) pontot az origó körül 45 fokkal óramutatóval megyegyező irányban.
+
+1) aponthomogén formái: |8 |   transzformáció mátrix    |cos (45) sin(45) 0 |
+                        |14|                            |-sin(45) cos(45) 0 |
+                        |1 |                            |    0      0     1 |
+
+    
+
+    M x p =     | 0.7071  0.7071   0  |     |8  |   |15.56  |
+                |-0.7071  0.7071   0  |  *  |14 | = |4.2426 |
+                |   0       0      1  |     |1  |   |1      | 
+                
+                
+                
+                 8*(-07071)+14*0.7071= 6*0.7071= 4.2426
+
+
+
+
+Tükrözzük a tér pontjait x=3 egyenesre
+3 elemi transzformációra van szükségünk
+1) eltölás, (-3;0)
+2) tükrözps az y tengelyre
+3) eltolás (3;0)
+
+x tengely szerinti tükrözés
+M2 =    |-1  0  0|
+        | 0  1  0|                      p' = M3*M2*M1*p= M*p
+        | 0  0  1|
+
+M1 =    | 1  0 -3|                          | -1  0  6|
+        | 0  1  0|                      M=  |  0  1  0|
+          0  0  1|                          |  0  0  1|
+
+M3 =    | 1  0  3|
+        | 0  1  0|
+        | 0  0  1|                  
+
+
+    | -1  0  6|         |-1|
+M=  |  0  1  0| * p =   | 2|
+    |  0  0  1|         | 1|
