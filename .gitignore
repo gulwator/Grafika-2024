@@ -1,0 +1,6 @@
+examples/
+MinGW/
+Notepad++/
+utils/
+*.exe
+shell.bat
