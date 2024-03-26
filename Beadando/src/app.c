@@ -6,7 +6,8 @@ void init_app(App* app, int width, int height)
 {
     int error_code;
     int inited_loaders;
-
+    app->appWidth=width;
+    app->appHeight=height;
     app->is_running = false;
 
     error_code = SDL_Init(SDL_INIT_EVERYTHING);
@@ -44,6 +45,7 @@ void init_app(App* app, int width, int height)
     init_scene(&(app->scene));
 
     app->is_running = true;
+    printf("width:%d, height:%d \n", app->appWidth, app->appHeight );
 }
 
 void init_opengl()
@@ -105,6 +107,10 @@ void handle_app_events(App* app)
     static int mouse_y = 0;
     int x;
     int y;
+    double zoom;
+    int appWidth = app->appWidth;
+    int appHeight = app->appHeight;
+    
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -114,16 +120,16 @@ void handle_app_events(App* app)
                 app->is_running = false;
                 break;
             case SDL_SCANCODE_W:
-                set_camera_speed(&(app->camera), 1);
+                set_camera_speed(&(app->camera), 2);
                 break;
             case SDL_SCANCODE_S:
-                set_camera_speed(&(app->camera), -1);
+                set_camera_speed(&(app->camera), -2);
                 break;
             case SDL_SCANCODE_A:
-                set_camera_side_speed(&(app->camera), 1);
+                set_camera_side_speed(&(app->camera), 2);
                 break;
             case SDL_SCANCODE_D:
-                set_camera_side_speed(&(app->camera), -1);
+                set_camera_side_speed(&(app->camera), -2);
                 break;
             default:
                 break;
@@ -153,9 +159,41 @@ void handle_app_events(App* app)
             }
             mouse_x = x;
             mouse_y = y;
+            // printf("%d\n",y);
+            if(y<50)
+            {
+                set_camera_speed(&(app->camera),2);
+            }
+
+           if (y>50 && y<appHeight-50)
+            {
+                set_camera_speed(&(app->camera),0);
+            }
+            printf("%d \n",appHeight);
+            if  (y>appHeight-50)
+            {
+                printf("kiértél");
+                set_camera_speed(&(app->camera),-2);
+            }
+
+             if(x < 50){set_camera_side_speed(&(app->camera),2);}
+           if (x > 50 && x < appWidth-50)
+            {
+                set_camera_side_speed(&(app->camera),0);
+            }
+            if  (x>appWidth-50)
+            {
+               set_camera_side_speed(&(app->camera),-2);
+            }
             break;
         case SDL_MOUSEBUTTONUP:
             is_mouse_down = false;
+            break;
+        
+        case SDL_MOUSEWHEEL:
+            zoom=0.0;
+            app->camera.zoom+=zoom-event.wheel.y/-10.0;
+            printf("%lf ", app->camera.zoom);
             break;
         case SDL_QUIT:
             app->is_running = false;
