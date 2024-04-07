@@ -45,12 +45,15 @@ void init_app(App* app, int width, int height)
     init_scene(&(app->scene));
 
     app->is_running = true;
-    printf("width:%d, height:%d \n", app->appWidth, app->appHeight );
+    // printf("width:%d, height:%d \n", app->appWidth, app->appHeight );
 }
 
 void init_opengl()
 {
     glShadeModel(GL_SMOOTH);
+    glEnable(GL_STENCIL_TEST);
+    glClearStencil(0);
+
 
     glEnable(GL_NORMALIZE);
     glEnable(GL_AUTO_NORMAL);
@@ -169,10 +172,10 @@ void handle_app_events(App* app)
             {
                 set_camera_speed(&(app->camera),0);
             }
-            printf("%d \n",appHeight);
+           
             if  (y>appHeight-50)
             {
-                printf("kiértél");
+                
                 set_camera_speed(&(app->camera),-2);
             }
 
@@ -193,7 +196,7 @@ void handle_app_events(App* app)
         case SDL_MOUSEWHEEL:
             zoom=0.0;
             app->camera.zoom+=zoom-event.wheel.y/-10.0;
-            printf("%lf ", app->camera.zoom);
+            // printf("%lf ", app->camera.zoom);
             break;
         case SDL_QUIT:
             app->is_running = false;
