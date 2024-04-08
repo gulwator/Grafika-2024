@@ -7,23 +7,24 @@ void init_scene(Scene* scene)
 {
     scene->rotation =0;
     load_model(&(scene->cube), "assets/models/cube.obj");
-    scene->texture_id = load_texture("assets/textures/cube.png");
+    load_model(&(scene->cityBlock), "assets/models/City_Block.obj");
+    // scene->texture_id = load_texture("assets/textures/cube.png");
 
-    glBindTexture(GL_TEXTURE_2D, scene->texture_id);
+    // glBindTexture(GL_TEXTURE_2D, scene->texture_id);
 
-    scene->material.ambient.red = 0.0;
-    scene->material.ambient.green = 0.0;
-    scene->material.ambient.blue = 0.0;
+    // scene->material.ambient.red = 0.0;
+    // scene->material.ambient.green = 0.0;
+    // scene->material.ambient.blue = 0.0;
 
-    scene->material.diffuse.red = 1.0;
-    scene->material.diffuse.green = 1.0;
-    scene->material.diffuse.blue = 0.0;
+    // scene->material.diffuse.red = 1.0;
+    // scene->material.diffuse.green = 1.0;
+    // scene->material.diffuse.blue = 0.0;
 
-    scene->material.specular.red = 0.0;
-    scene->material.specular.green = 0.0;
-    scene->material.specular.blue = 0.0;
+    // scene->material.specular.red = 0.0;
+    // scene->material.specular.green = 0.0;
+    // scene->material.specular.blue = 0.0;
 
-    scene->material.shininess = 0.0;
+    // scene->material.shininess = 0.0;
 }
 
 void set_lighting()
@@ -78,18 +79,19 @@ void update_scene(Scene* scene, double elapsed_time)
 
 void render_scene(const Scene* scene)
 {
-    set_material(&(scene->material));
+    // set_material(&(scene->material));
     set_lighting();
     draw_origin();
-    for (int i = 0; i < 10; i++)
+    for (int i = 0; i < 1; i++)
     {
         
-        for (int j = 0; j < 10; j++)
+        for (int j = 0; j < 1; j++)
         {
         
         glPushMatrix();
         // glRotatef(i*10,0,0,36);
         glTranslatef(i*1.1, j*1.1,0);
+        // glScalef(0.1,0.1,0.1);
         // printf("%lf  %lf \n",sin(scene->rotation), scene->rotation );
         
         //forgatás
@@ -98,7 +100,7 @@ void render_scene(const Scene* scene)
         //kicsinyit
         //  glRotatef(scene->rotation, 0,0,0);
         // glRotatef(scene->rotation, 0,0,1);
-        draw_model(&(scene->cube));
+        draw_model(&(scene->cityBlock));
         glPopMatrix();
         
         
@@ -106,14 +108,14 @@ void render_scene(const Scene* scene)
         }   /* code */
     
     }
-    for (int i = 0; i < 9; i++)
-    {
-        glPushMatrix();
-        glTranslatef(0.55+i*1.1,-0.45,-0.45) ;
-        glScalef(0.1,0.1,0.1);
-        draw_model(&(scene->cube));
-        glPopMatrix();    /* code */
-    }
+    // for (int i = 0; i < 9; i++)
+    // {
+    //     glPushMatrix();
+    //     glTranslatef(0.55+i*1.1,-0.45,-0.45) ;
+    //     glScalef(0.1,0.1,0.1);
+    //     draw_model(&(scene->cube));
+    //     glPopMatrix();    /* code */
+    // }
     
     
     
@@ -123,6 +125,8 @@ void render_scene(const Scene* scene)
 
 void draw_origin()
 {
+
+
     glBegin(GL_LINES);
 
     glColor3f(1, 0, 0);

@@ -195,7 +195,7 @@ void handle_app_events(App* app)
         
         case SDL_MOUSEWHEEL:
             zoom=0.0;
-            app->camera.zoom+=zoom-event.wheel.y/-10.0;
+            app->camera.zoom+=zoom-event.wheel.y/-1.0;
             // printf("%lf ", app->camera.zoom);
             break;
         case SDL_QUIT:

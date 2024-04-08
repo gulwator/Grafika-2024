@@ -9,6 +9,7 @@
 typedef struct Scene
 {
     Model cube;
+    Model cityBlock;
     Material material;
     GLuint texture_id;
     double rotation;
