@@ -123,16 +123,16 @@ void handle_app_events(App* app)
                 app->is_running = false;
                 break;
             case SDL_SCANCODE_W:
-                set_camera_speed(&(app->camera), 2);
+                set_camera_speed(&(app->camera), 10);
                 break;
             case SDL_SCANCODE_S:
-                set_camera_speed(&(app->camera), -2);
+                set_camera_speed(&(app->camera), -10);
                 break;
             case SDL_SCANCODE_A:
-                set_camera_side_speed(&(app->camera), 2);
+                set_camera_side_speed(&(app->camera), 10);
                 break;
             case SDL_SCANCODE_D:
-                set_camera_side_speed(&(app->camera), -2);
+                set_camera_side_speed(&(app->camera), -10);
                 break;
             default:
                 break;
@@ -165,7 +165,7 @@ void handle_app_events(App* app)
             // printf("%d\n",y);
             if(y<50)
             {
-                set_camera_speed(&(app->camera),2);
+                set_camera_speed(&(app->camera),10);
             }
 
            if (y>50 && y<appHeight-50)
@@ -176,17 +176,17 @@ void handle_app_events(App* app)
             if  (y>appHeight-50)
             {
                 
-                set_camera_speed(&(app->camera),-2);
+                set_camera_speed(&(app->camera),-10);
             }
 
-             if(x < 50){set_camera_side_speed(&(app->camera),2);}
+             if(x < 50){set_camera_side_speed(&(app->camera),10);}
            if (x > 50 && x < appWidth-50)
             {
                 set_camera_side_speed(&(app->camera),0);
             }
             if  (x>appWidth-50)
             {
-               set_camera_side_speed(&(app->camera),-2);
+               set_camera_side_speed(&(app->camera),-10);
             }
             break;
         case SDL_MOUSEBUTTONUP:
