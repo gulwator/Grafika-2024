@@ -1,0 +1,18 @@
+TODO: a kép miért végja le a kockákat
+Színek a dolgokhoz:
+RGB(128, 128, 128) - Szürke 
+RGB(102, 153, 102)
+RGB(76, 178, 76)
+RGB(51, 204, 51)
+RGB(0, 255, 0) - Világos, élénk zöld
+
+structúrát definiálni az egyes elemeknek:
+Struct plot{
+    double xCordinate;
+    double yCordinate;
+    Enum Structure;
+    int bonus;
+    double radius;
+}plot;
+
+létrehozni a structura tömböt amiben eltároljuk hogy mi van benne.
