@@ -7,7 +7,7 @@ void init_scene(Scene* scene)
 {
     scene->rotation =0;
     load_model(&(scene->cube), "assets/models/cube.obj");
-    load_model(&(scene->cityBlock), "assets/models/City_Block.obj");
+    load_model(&(scene->cityBlock), "assets/models/houseBlockTM.obj");
     // scene->texture_id = load_texture("assets/textures/cube.png");
 
     // glBindTexture(GL_TEXTURE_2D, scene->texture_id);
