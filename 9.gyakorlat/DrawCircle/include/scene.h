@@ -3,6 +3,7 @@
 
 #include "camera.h"
 #include "texture.h"
+#include "plot.h"
 
 #include <obj/model.h>
 
@@ -13,6 +14,7 @@ typedef struct Scene
     Material material;
     GLuint texture_id;
     double rotation;
+    Plot cubes[3];
     
 } Scene;
 

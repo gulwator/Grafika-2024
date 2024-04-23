@@ -1,5 +1,7 @@
 #include "scene.h"
 #include "math.h"
+#include "utils.h"
+#include "plot.h"
 #include <obj/load.h>
 #include <obj/draw.h>
 
@@ -25,6 +27,20 @@ void init_scene(Scene* scene)
     scene->material.specular.blue = 0.0;
 
     scene->material.shininess = 0.0;
+    
+    scene->cubes[0].x1=3;
+    scene->cubes[0].x2=7;
+    scene->cubes[0].y1=3;
+    scene->cubes[0].y2=7;
+    scene->cubes[1].x1=-1;
+    scene->cubes[1].x2=-2;
+    scene->cubes[1].y1=-1;
+    scene->cubes[1].y2=-2;
+    scene->cubes[2].x1=-2;
+    scene->cubes[2].x2=-4;
+    scene->cubes[2].y1=2;
+    scene->cubes[2].y2=4;
+    
 }
 
 void set_lighting()
@@ -69,9 +85,18 @@ void set_material(const Material* material)
 
 void update_scene(Scene* scene, double elapsed_time)
 {
+    scene->cubes[2].bonus=0;
     scene->rotation += 36*elapsed_time;
+    double middle_x;
+    double middle_y;
+    get_midlepoint(&scene->cubes[2],&middle_x, &middle_y);
+    double distance =check_distance(0,0,5,middle_x,middle_y);
+    if (distance<0)
+    {
+        scene->cubes[2].bonus=+1;
+    }
     
-    //
+    
     
     
 
@@ -83,6 +108,9 @@ void render_scene(const Scene* scene)
     set_lighting();
     draw_origin();
     draw_Circle(0,0,5.0);
+    draw_plot(scene->cubes[0]);
+    draw_plot(scene->cubes[1]);
+    draw_plot(scene->cubes[2]);
     // for (int i = 0; i < 1; i++)
     // {
         
@@ -144,26 +172,8 @@ void draw_origin()
 
     glEnd();
 
-    glBegin(GL_QUADS);
-    glColor3f(1,0,0);
-    glVertex3f(7,3,0);
-    glVertex3f(7,7,0);
-    glVertex3f(3,7,0);
-    glVertex3f(3,3,0);
+    
 
-    glColor3f(1,0,0);
-    glVertex3f(-3,-6,0);
-    glVertex3f(-6,-6,0);
-    glVertex3f(-6,-3,0);
-    glVertex3f(-3,-3,0);
-
-    glVertex3f(-2,4,0);
-    glVertex3f(-4,4,0);
-    glVertex3f(-4,2,0);
-    glVertex3f(-2,2,0);
-
-
-    glEnd();
 
 
 }

@@ -13,7 +13,7 @@ double check_distance(double circle_origo_x, double circle_origo_y, double circl
 
 }
 
-void get_midlepoint(double x1, double x2, double y1, double y2, double* middle_x, double* middle_y){
-	 middle_x = (x1 + x2)/2;
-	 middle_y = (y1+y2)/2;
+void get_midlepoint(Plot* cube, double* middle_x, double* middle_y){
+	 *middle_x = (cube->x1 + cube->x2)/2;
+	 *middle_y = (cube->y1+cube->y2)/2;
 }
