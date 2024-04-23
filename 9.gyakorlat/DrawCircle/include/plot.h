@@ -12,7 +12,7 @@ typedef struct Plot{
 }Plot;
 
 void draw_plot(Plot cube);
-
+void update_plot(Plot cube);
 
 
 #endif /*PLOT_H*/

@@ -1,4 +1,4 @@
-TODO: a kép miért végja le a kockákat
+
 Színek a dolgokhoz:
 RGB(128, 128, 128) - Szürke 
 RGB(102, 153, 102)
