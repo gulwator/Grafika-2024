@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "math.h"
+#include "blocks.h"
 #include <obj/load.h>
 #include <obj/draw.h>
 
@@ -7,7 +8,8 @@ void init_scene(Scene* scene)
 {
     scene->rotation =0;
     load_model(&(scene->cube), "assets/models/cube.obj");
-    load_model(&(scene->cityBlock), "assets/models/houseBlockTM.obj");
+    // load_model(&(scene->cityBlock), "assets/models/houseBlockTM.obj");
+    load_model(&(scene->cityBlock), "assets/models/cube.obj");
     // scene->texture_id = load_texture("assets/textures/cube.png");
 
     // glBindTexture(GL_TEXTURE_2D, scene->texture_id);
@@ -25,6 +27,22 @@ void init_scene(Scene* scene)
     // scene->material.specular.blue = 0.0;
 
     // scene->material.shininess = 0.0;
+for (int x = 0; x < MAP_WIDTH ; x++)
+{
+    for (int y = 0; y < MAP_HEIGHT; y++)
+    {
+        scene->map[x][y].bonus=0;
+        scene->map[x][y].effect=0;
+        scene->map[x][y].radius=0;
+        scene->map[x][y].structure=0;
+    }
+    
+}
+
+
+
+
+    
 }
 
 void set_lighting()
@@ -82,15 +100,16 @@ void render_scene(const Scene* scene)
     // set_material(&(scene->material));
     set_lighting();
     draw_origin();
-    for (int i = 0; i < 1; i++)
+    draw_Circle(62.5,62.5, 0.0,150.0);
+    for (int i = 0; i < MAP_WIDTH; i++)
     {
         
-        for (int j = 0; j < 1; j++)
+        for (int j = 0; j < MAP_HEIGHT; j++)
         {
         
         glPushMatrix();
         // glRotatef(i*10,0,0,36);
-        glTranslatef(i*1.1, j*1.1,0);
+        glTranslatef(i*25, j*25,0);
         // glScalef(0.1,0.1,0.1);
         // printf("%lf  %lf \n",sin(scene->rotation), scene->rotation );
         
@@ -100,7 +119,17 @@ void render_scene(const Scene* scene)
         //kicsinyit
         //  glRotatef(scene->rotation, 0,0,0);
         // glRotatef(scene->rotation, 0,0,1);
+        
+        //DRAW MAP 
+        if (scene->map[i][j].structure==0)
+        {
         draw_model(&(scene->cityBlock));
+            /* code */
+        }
+        
+
+
+
         glPopMatrix();
         
         
@@ -142,4 +171,20 @@ void draw_origin()
     glVertex3f(0, 0, 1);
 
     glEnd();
+}
+
+
+void draw_Circle( double x, double y, double z, double radius){
+
+    double angle;
+    glPointSize(2);
+    glBegin( GL_POINTS);
+    glColor3f(1,0,0);
+ for (angle = 0.0; angle <= (2.0 * M_PI); angle += 0.01)
+ {
+ x = radius * sin(angle);
+ z = radius * cos(angle);
+ glVertex3f(x, y, z);
+ }
+ glEnd();
 }

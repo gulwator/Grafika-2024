@@ -3,8 +3,12 @@
 
 #include "camera.h"
 #include "texture.h"
+#include "blocks.h"
 
 #include <obj/model.h>
+
+#define MAP_WIDTH 5
+#define MAP_HEIGHT  5
 
 typedef struct Scene
 {
@@ -13,6 +17,7 @@ typedef struct Scene
     Material material;
     GLuint texture_id;
     double rotation;
+    Plot map[MAP_WIDTH][MAP_HEIGHT];
     
 } Scene;
 
