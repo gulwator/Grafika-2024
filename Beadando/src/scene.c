@@ -188,7 +188,7 @@ void render_scene(const Scene* scene)
         {
         case 0:
             glColor3f(0.5, 0.5, 0.5);
-            draw_model(&(scene->cube));
+            draw_model(&(scene->cityPlot));
             break;
         case 1:
             glColor3f(0, 1, 0);
