@@ -37,4 +37,14 @@ typedef struct Material
  */
 double degree_to_radian(double degree);
 
+/**
+ * calculates obj in X,Y in the circle radius
+ * circle_origo_x,
+ * circle_origo y,
+ * circle_radius,
+ * object X,
+ * object Y,
+*/
+double check_distance(double circle_origo_x, double circle_origo_y, double circle_radius, double middle_x, double middle_y );
+
 #endif /* UTILS_H */

@@ -9,11 +9,15 @@
 
 #define MAP_WIDTH 5
 #define MAP_HEIGHT  5
+#define GRID_SOMETHING 25
 
 typedef struct Scene
 {
     Model cube;
-    Model cityBlock;
+    Model templePlot;
+    Model factoryPlot;
+    Model cityPlot;
+    Model sphere;
     Material material;
     GLuint texture_id;
     double rotation;
@@ -48,7 +52,17 @@ void render_scene(const Scene* scene );
 
 /**
  * Draw the origin of the world coordinate system.
+ 
  */
 void draw_origin();
 
+/**
+ * Draw a circle around the object
+ * x is the x coord
+ * y is the y coord
+ * z is the z coord
+ * radius is the radius of the circle
+ * 
+*/
+void draw_Circle( double x, double y, double z, double radius);
 #endif /* SCENE_H */

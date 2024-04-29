@@ -4,12 +4,16 @@
 #include <obj/load.h>
 #include <obj/draw.h>
 
+#
+
 void init_scene(Scene* scene)
 {
     scene->rotation =0;
     load_model(&(scene->cube), "assets/models/cube.obj");
-    // load_model(&(scene->cityBlock), "assets/models/houseBlockTM.obj");
-    load_model(&(scene->cityBlock), "assets/models/cube.obj");
+    load_model(&(scene->cityPlot), "assets/models/houseBlockTM.obj");
+    load_model(&(scene->templePlot), "assets/models/templeBlockTM.obj");
+    load_model(&(scene->factoryPlot), "assets/models/factoryBlockTM.obj");
+    load_model(&(scene->sphere), "assets/models/sphere.obj");
     // scene->texture_id = load_texture("assets/textures/cube.png");
 
     // glBindTexture(GL_TEXTURE_2D, scene->texture_id);
@@ -31,10 +35,48 @@ for (int x = 0; x < MAP_WIDTH ; x++)
 {
     for (int y = 0; y < MAP_HEIGHT; y++)
     {
+        scene->map[x][y].structure=rand() % (2 + 1 - 0) + 0;
+
+        switch (scene->map[x][y].structure)
+        {
+        case 0:
         scene->map[x][y].bonus=0;
         scene->map[x][y].effect=0;
         scene->map[x][y].radius=0;
-        scene->map[x][y].structure=0;
+        break;
+        case 1:
+            scene->map[x][y].bonus=5;
+            scene->map[x][y].effect=1;
+            scene->map[x][y].radius=1;
+        break;
+        case 2:
+            scene->map[x][y].bonus=-5;
+            scene->map[x][y].effect=-1;
+            scene->map[x][y].radius=1;
+        break;
+                
+        default:
+            break;
+        }
+        
+        
+        
+        // if (x==y)
+        // {
+        //     scene->map[x][y].structure=1;
+        //     scene->map[x][y].effect=1;
+        // scene->map[x][y].radius=1;
+            
+        // }
+        // if ((x+y)== 4)
+        // {
+            
+        //     scene->map[x][y].structure=2; 
+        //     scene->map[x][y].effect=-1;
+        // scene->map[x][y].radius=1;
+        // }
+        
+        
     }
     
 }
@@ -89,7 +131,37 @@ void update_scene(Scene* scene, double elapsed_time)
 {
     scene->rotation += 36*elapsed_time;
     
-    
+    for (int x = 0; x < MAP_WIDTH ; x++)
+    {
+        for (int y = 0; y < MAP_HEIGHT; y++)
+        {
+            if (scene->map[x][y].structure!=0)
+            {
+                /* code */
+            //TODO: ha az adot ponton lévő objektum nem lakóépület, akkor a körülötte lévő lakóépületek bonuszát csökkentse vagy növelje 
+
+            //TODO: megnézzük a távolságot
+                double distance =check_distance(GRID_SOMETHING*x,GRID_SOMETHING*y,GRID_SOMETHING*1,GRID_SOMETHING*x,GRID_SOMETHING*y);
+                if (distance<0)
+                {
+                    // printf("cube %d is in the circle\n",i);
+                    // scene->cubes[i].bonus= scene->cubes[i].bonus+1;
+                    // printf("cube %d  current bonus: %d\n",i,scene->cubes[i].bonus);
+                    // update_plot(scene->cubes[i]);
+                }
+            //TODO: ha a távolság rendben, megnézzük ott milyen épület van
+            //TODO: update-eljük színt    
+
+
+
+
+
+
+
+
+            }
+        }
+    }
     
     
 
@@ -100,7 +172,7 @@ void render_scene(const Scene* scene)
     // set_material(&(scene->material));
     set_lighting();
     draw_origin();
-    draw_Circle(62.5,62.5, 0.0,150.0);
+    draw_Moon_circle(62.5,62.5, 0.0,150.0);
     for (int i = 0; i < MAP_WIDTH; i++)
     {
         
@@ -108,23 +180,26 @@ void render_scene(const Scene* scene)
         {
         
         glPushMatrix();
-        // glRotatef(i*10,0,0,36);
+        
         glTranslatef(i*25, j*25,0);
-        // glScalef(0.1,0.1,0.1);
-        // printf("%lf  %lf \n",sin(scene->rotation), scene->rotation );
-        
-        //forgatás
-         //glRotatef(i*j*10, 0,0,1);
-        
-        //kicsinyit
-        //  glRotatef(scene->rotation, 0,0,0);
-        // glRotatef(scene->rotation, 0,0,1);
-        
+        draw_Circle(i*25,j*25,0,25*scene->map[i][j].radius);
         //DRAW MAP 
-        if (scene->map[i][j].structure==0)
+        switch (scene->map[i][j].structure)
         {
-        draw_model(&(scene->cityBlock));
-            /* code */
+        case 0:
+            glColor3f(0.5, 0.5, 0.5);
+            draw_model(&(scene->cube));
+            break;
+        case 1:
+            glColor3f(0, 1, 0);
+            draw_model(&(scene->templePlot));
+            break;
+        case 2: 
+            glColor3f(1,0,0);
+            draw_model(&(scene->factoryPlot));
+            break;
+        default:
+            break;
         }
         
 
@@ -179,6 +254,25 @@ void draw_Circle( double x, double y, double z, double radius){
     double angle;
     glPointSize(2);
     glBegin( GL_POINTS);
+    glColor3f(0.5,0.5,0.5);
+ for (angle = 0.0; angle <= (2.0 * M_PI); angle += 0.01)
+ {
+ x = radius * sin(angle);
+ y = radius * cos(angle);
+ glVertex3f(x, y, z);
+ }
+//  glPushMatrix();
+//  glTranslatef(x,y,z);
+//  draw_model(&(scene->sphere));
+//  glPopMatrix();
+ glEnd();
+}
+
+void draw_Moon_circle( double x, double y, double z, double radius){
+
+    double angle;
+    glPointSize(2);
+    glBegin( GL_POINTS);
     glColor3f(1,0,0);
  for (angle = 0.0; angle <= (2.0 * M_PI); angle += 0.01)
  {
@@ -186,5 +280,9 @@ void draw_Circle( double x, double y, double z, double radius){
  z = radius * cos(angle);
  glVertex3f(x, y, z);
  }
+//  glPushMatrix();
+//  glTranslatef(x,y,z);
+//  draw_model(&(scene->sphere));
+//  glPopMatrix();
  glEnd();
 }
