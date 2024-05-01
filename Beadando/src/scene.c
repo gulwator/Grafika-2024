@@ -3,8 +3,8 @@
 #include "blocks.h"
 #include <obj/load.h>
 #include <obj/draw.h>
+#include <stdio.h>
 
-#
 
 void init_scene(Scene* scene)
 {
@@ -135,20 +135,48 @@ void update_scene(Scene* scene, double elapsed_time)
     {
         for (int y = 0; y < MAP_HEIGHT; y++)
         {
+            if(scene->map[x][y].structure==0){
+                scene->map[x][y].bonus=0;
+            }}}
+    //végigmegyek a MAP-on
+    for (int x = 0; x < MAP_WIDTH ; x++)
+    {
+        for (int y = 0; y < MAP_HEIGHT; y++)
+        {
+            
+            //Ha nem lakóépületen állok
             if (scene->map[x][y].structure!=0)
             {
-                /* code */
-            //TODO: ha az adot ponton lévő objektum nem lakóépület, akkor a körülötte lévő lakóépületek bonuszát csökkentse vagy növelje 
-
-            //TODO: megnézzük a távolságot
-                double distance =check_distance(GRID_SOMETHING*x,GRID_SOMETHING*y,GRID_SOMETHING*1,GRID_SOMETHING*x,GRID_SOMETHING*y);
-                if (distance<0)
-                {
-                    // printf("cube %d is in the circle\n",i);
-                    // scene->cubes[i].bonus= scene->cubes[i].bonus+1;
-                    // printf("cube %d  current bonus: %d\n",i,scene->cubes[i].bonus);
-                    // update_plot(scene->cubes[i]);
+              
+            //akkor megnézem az adott épüóletnek a közelségét
+            double radius = scene->map[x][y].radius;
+            
+            //ezena távon megnézem minden irányba hogy mekkor aa körülötte lévők távolsága tőle
+                for(int i= -radius ; i<=radius; i++){
+                    for(int j = -radius; j<=radius;j++){
+                        double distance =check_distance(x,y,radius,i,j);
+                        printf("distance: %f  radius: %f\n", distance,radius);
+                        if(distance>radius){
+                            if(scene->map[x+i][y+j].structure==0)
+                            {
+                                
+                                scene->map[x+i][y+j].bonus+= scene->map[x][y].effect;   
+                                printf("valtozott a bonus x:%d, y:%d   helyen %d-re\n", x+i,y+j,scene->map[x+i][y+j].bonus);
+                            }
+                        }
+                    }
                 }
+                printf("\n\n");
+                
+                
+                
+                // if (distance<0)
+                // {
+                //     // printf("cube %d is in the circle\n",i);
+                //     // scene->cubes[i].bonus= scene->cubes[i].bonus+1;
+                //     // printf("cube %d  current bonus: %d\n",i,scene->cubes[i].bonus);
+                //     // update_plot(scene->cubes[i]);
+                // }
             //TODO: ha a távolság rendben, megnézzük ott milyen épület van
             //TODO: update-eljük színt    
 
@@ -160,6 +188,7 @@ void update_scene(Scene* scene, double elapsed_time)
 
 
             }
+                // printf("%d ,%d koordinátának %d bunusza van\n",x,y,scene->map[x][y].bonus);
         }
     }
     
@@ -169,6 +198,7 @@ void update_scene(Scene* scene, double elapsed_time)
 
 void render_scene(const Scene* scene)
 {
+    
     // set_material(&(scene->material));
     set_lighting();
     draw_origin();
@@ -187,7 +217,16 @@ void render_scene(const Scene* scene)
         switch (scene->map[i][j].structure)
         {
         case 0:
-            glColor3f(0.5, 0.5, 0.5);
+               if(scene->map[i][j].bonus>=1){
+                
+                    glColor3f(0.3,0.7,0.3);
+               }else if(scene->map[i][j].bonus<=-1){
+                    glColor3f(0.7,0.3,0.3);
+               }else{
+                glColor3f(0.5,0.5,0.5);
+               }
+                // printf("%d a bonusza: %d, %d-nek",scene->map[i][j].bonus, i,j );
+             
             draw_model(&(scene->cityPlot));
             break;
         case 1:
@@ -201,6 +240,7 @@ void render_scene(const Scene* scene)
         default:
             break;
         }
+                // printf("%d ,%d  koordinátán  %d bonustz van\n", i,j, scene->map[i][j].bonus);
         
 
 

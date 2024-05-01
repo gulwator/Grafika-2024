@@ -7,8 +7,8 @@
 
 #include <obj/model.h>
 
-#define MAP_WIDTH 5
-#define MAP_HEIGHT  5
+#define MAP_WIDTH 3
+#define MAP_HEIGHT  3
 #define GRID_SOMETHING 25
 
 typedef struct Scene

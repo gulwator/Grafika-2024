@@ -1,6 +1,11 @@
 #ifndef BLOCKS_H
 #define BLOCKS_H
 
+/**
+*Plot
+*bonus: having bonus
+*effect: adding others bonus
+*/
 typedef struct Plot{
     
     int structure;
