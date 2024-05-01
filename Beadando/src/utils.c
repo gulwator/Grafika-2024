@@ -8,6 +8,8 @@ double degree_to_radian(double degree)
 }
 
 double check_distance(double circle_origo_x, double circle_origo_y, double circle_radius, double middle_x, double middle_y ){
-	double distance_circle_to_square= sqrt((circle_origo_x-middle_x)*(circle_origo_x-middle_x)+ (circle_origo_y-middle_y)*(circle_origo_y-middle_y));
-	return distance_circle_to_square-circle_radius;
+	double first_value = circle_origo_x-middle_x;
+	double second_value = circle_origo_y-middle_y;
+	double distance_circle_to_square= sqrt((first_value*first_value)+ (second_value*second_value));
+	return distance_circle_to_square;
 }
