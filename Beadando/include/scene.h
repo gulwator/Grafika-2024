@@ -4,11 +4,11 @@
 #include "camera.h"
 #include "texture.h"
 #include "blocks.h"
-
+#include "utils.h"
 #include <obj/model.h>
 
-#define MAP_WIDTH 3
-#define MAP_HEIGHT  3
+#define MAP_WIDTH 4
+#define MAP_HEIGHT  4
 #define GRID_SOMETHING 25
 
 typedef struct Scene
@@ -22,9 +22,16 @@ typedef struct Scene
     GLuint texture_id;
     double rotation;
     Plot map[MAP_WIDTH][MAP_HEIGHT];
+    Color effect_colors[7];
     
 } Scene;
 
+enum ObjectName {
+    BACKGROUND,
+    RED_CUBE,
+    GREEN_CUBE,
+    BLUE_CUBE
+};
 /**
  * Initialize the scene by loading models.
  */

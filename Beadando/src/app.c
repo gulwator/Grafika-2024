@@ -1,6 +1,8 @@
 #include "app.h"
 
 #include <SDL2/SDL_image.h>
+#define PICK_BUFFER_SIZE 256
+
 
 void init_app(App* app, int width, int height)
 {
@@ -68,7 +70,7 @@ void init_opengl()
     glClearDepth(1.0);
 
     glEnable(GL_TEXTURE_2D);
-
+    // glEnable(GL_FOG);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
@@ -115,7 +117,11 @@ void handle_app_events(App* app)
     double zoom;
     int appWidth = app->appWidth;
     int appHeight = app->appHeight;
-    
+    // bool fog = false;
+    // float fog_start = 0;
+    //                 float density= 1.0;
+    //                 glFogfv(GL_FOG_DENSITY, &density);
+    //                 glFogfv(GL_FOG_START, &fog_start);
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -136,6 +142,25 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), -15);
                 break;
+            case SDL_SCANCODE_E:
+                // printf("%f", fogstart);
+                
+                // fog= !fog;
+                    
+                // if (fog)
+                // {
+                    
+                //     float fog_color[] = {1, 1, 1, 1};
+                //     glFogfv(GL_FOG_COLOR, fog_color);/* code */
+                // }
+                // else{
+                    
+                //     float fog_color[] = {0, 0, 0, 0};
+                //     glFogfv(GL_FOG_COLOR, fog_color);
+                // }
+                
+                
+                break;
             default:
                 break;
             }
@@ -155,7 +180,15 @@ void handle_app_events(App* app)
             }
             break;
         case SDL_MOUSEBUTTONDOWN:
-            is_mouse_down = true;
+             if (event.button.button == SDL_BUTTON_LEFT) {
+                is_mouse_down = true;
+            } else if (event.button.button == SDL_BUTTON_RIGHT) {
+                SDL_GetMouseState(&x, &y);
+                printf("Pick object at (%d, %d):\n", x, y);
+                pick_test(app);
+                unsigned int object_name = find_object_on_scene(&(app->scene), x, y);
+                printf("Picked object name: %u\n", object_name);
+            }
             break;
         case SDL_MOUSEMOTION:
             SDL_GetMouseState(&x, &y);
@@ -251,3 +284,27 @@ void destroy_app(App* app)
 
     SDL_Quit();
 }
+
+void pick_test(App* app)
+{
+    printf("Pick test ...\n");
+
+    unsigned int pick_buffer[PICK_BUFFER_SIZE];
+    glSelectBuffer(PICK_BUFFER_SIZE, pick_buffer);
+
+    glRenderMode(GL_SELECT);
+    glInitNames();
+    glPushName(BACKGROUND);
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+
+    glPushMatrix();
+    set_view(&(app->camera));
+    render_scene(&(app->scene));
+    glPopMatrix();
+
+    GLint n_hits = glRenderMode(GL_RENDER);
+    printf("Number of hits: %d\n", n_hits);
+}
+

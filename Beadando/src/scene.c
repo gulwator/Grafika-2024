@@ -5,9 +5,38 @@
 #include <obj/draw.h>
 #include <stdio.h>
 
+#define PICK_BUFFER_SIZE 256
 
 void init_scene(Scene* scene)
 {
+    scene->effect_colors[0].red=0.8;
+    scene->effect_colors[0].green=0.2;
+    scene->effect_colors[0].blue=0.2;
+
+    scene->effect_colors[1].red=0.7;
+    scene->effect_colors[1].green=0.3;
+    scene->effect_colors[1].blue=0.3;
+    
+    scene->effect_colors[2].red=0.6;
+    scene->effect_colors[2].green=0.4;
+    scene->effect_colors[2].blue=0.4;
+    
+    scene->effect_colors[3].red=0.5;
+    scene->effect_colors[3].green=0.5;
+    scene->effect_colors[3].blue=0.5;
+    
+    scene->effect_colors[4].red=0.4;
+    scene->effect_colors[4].green=0.6;
+    scene->effect_colors[4].blue=0.4;
+    
+    scene->effect_colors[5].red=0.3;
+    scene->effect_colors[5].green=0.7;
+    scene->effect_colors[5].blue=0.3;
+    
+    scene->effect_colors[6].red=0.2;
+    scene->effect_colors[6].green=0.8;
+    scene->effect_colors[6].blue=0.2;
+
     scene->rotation =0;
     load_model(&(scene->cube), "assets/models/cube.obj");
     load_model(&(scene->cityPlot), "assets/models/houseBlockTM.obj");
@@ -35,7 +64,13 @@ for (int x = 0; x < MAP_WIDTH ; x++)
 {
     for (int y = 0; y < MAP_HEIGHT; y++)
     {
-        scene->map[x][y].structure=rand() % (2 + 1 - 0) + 0;
+        //  scene->map[x][y].structure=rand() % (2 + 1 - 0) + 0;
+        if(x==y && x<2){
+            scene->map[x][y].structure=1;
+        }else{
+            scene->map[x][y].structure=0;
+        }
+
 
         switch (scene->map[x][y].structure)
         {
@@ -154,19 +189,19 @@ void update_scene(Scene* scene, double elapsed_time)
             //ezena távon megnézem minden irányba hogy mekkor aa körülötte lévők távolsága tőle
                 for(int i= -radius ; i<=radius; i++){
                     for(int j = -radius; j<=radius;j++){
-                        double distance =check_distance(x,y,radius,i,j);
-                        printf("distance: %f  radius: %f\n", distance,radius);
-                        if(distance>radius){
+                        double distance =check_distance(x,y,radius,x+i,y+j);
+                        // printf("%d %d -től distance: %f  radius: %f  nézett pont: %d , %d , i: %d j: %d\n",x,y, distance,radius, x+i,y+j,i,j);
+                        if(distance<=radius){
                             if(scene->map[x+i][y+j].structure==0)
                             {
                                 
                                 scene->map[x+i][y+j].bonus+= scene->map[x][y].effect;   
-                                printf("valtozott a bonus x:%d, y:%d   helyen %d-re\n", x+i,y+j,scene->map[x+i][y+j].bonus);
+                                // printf("valtozott a bonus x:%d, y:%d   helyen %d-re\n", x+i,y+j,scene->map[x+i][y+j].bonus);
                             }
                         }
                     }
                 }
-                printf("\n\n");
+                // printf("\n\n");
                 
                 
                 
@@ -212,20 +247,38 @@ void render_scene(const Scene* scene)
         glPushMatrix();
         
         glTranslatef(i*25, j*25,0);
-        draw_Circle(i*25,j*25,0,25*scene->map[i][j].radius);
+        // draw_Circle(i*25,j*25,0,25*scene->map[i][j].radius);
         //DRAW MAP 
         switch (scene->map[i][j].structure)
         {
         case 0:
-               if(scene->map[i][j].bonus>=1){
-                
-                    glColor3f(0.3,0.7,0.3);
-               }else if(scene->map[i][j].bonus<=-1){
-                    glColor3f(0.7,0.3,0.3);
-               }else{
-                glColor3f(0.5,0.5,0.5);
-               }
-                // printf("%d a bonusza: %d, %d-nek",scene->map[i][j].bonus, i,j );
+            switch (scene->map[i][j].bonus)
+            {
+            case -3:
+                glColor3f(scene->effect_colors[0].red,scene->effect_colors[0].green,scene->effect_colors[0].blue);
+                break;
+            case -2:
+                glColor3f(scene->effect_colors[1].red,scene->effect_colors[1].green,scene->effect_colors[1].blue);
+                break;
+            case -1:
+                glColor3f(scene->effect_colors[2].red,scene->effect_colors[2].green,scene->effect_colors[2].blue);
+                break;
+            case 0:
+                glColor3f(scene->effect_colors[3].red,scene->effect_colors[3].green,scene->effect_colors[3].blue);
+                break;
+            case 1:
+                glColor3f(scene->effect_colors[4].red,scene->effect_colors[4].green,scene->effect_colors[4].blue);
+                break;
+            case 2:
+                glColor3f(scene->effect_colors[5].red,scene->effect_colors[5].green,scene->effect_colors[5].blue);
+                break;
+            case 3:
+                glColor3f(scene->effect_colors[6].red,scene->effect_colors[6].green,scene->effect_colors[6].blue);
+                break;
+            default:
+                break;
+            }
+            // printf("%d a bonusza: %d, %d-nek\n",scene->map[i][j].bonus, i,j );
              
             draw_model(&(scene->cityPlot));
             break;
@@ -266,6 +319,8 @@ void render_scene(const Scene* scene)
     
     
 }
+
+
 
 void draw_origin()
 {
@@ -326,3 +381,50 @@ void draw_Moon_circle( double x, double y, double z, double radius){
 //  glPopMatrix();
  glEnd();
 }
+
+unsigned int find_object_on_scene(const Scene* scene, int x, int y)
+{
+    unsigned int pick_buffer[PICK_BUFFER_SIZE];
+
+    glSelectBuffer(PICK_BUFFER_SIZE, pick_buffer);
+
+    glRenderMode(GL_SELECT);
+    glInitNames();
+    glPushName(BACKGROUND);
+    // NOTE: Lighting, shading and texturing can be disabled for better performance.
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glMatrixMode(GL_MODELVIEW);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glRotatef(-(0 + 90), 1.0, 0, 0);
+    glRotatef(-(0 - 90), 0, 0, 1.0);
+    glTranslatef(0, 0, -1);
+    glPushMatrix();
+    render_scene(scene);
+    glPopMatrix();
+
+    GLint depth;
+    glGetIntegerv(GL_NAME_STACK_DEPTH, &depth);
+    printf("Depth: %d\n", depth);
+
+    GLint n_hits = glRenderMode(GL_RENDER);
+    printf("Number of hits: %d\n", n_hits);
+
+    for (int i = 0; i < n_hits; ++i) {
+        int n_items = pick_buffer[i + 0];
+        printf("----\n");
+        printf("Hit %d\n", i);
+        printf("nitems : %d\n", n_items);
+        printf("zmin   : %d\n", pick_buffer[i + 1]);
+        printf("zmax   : %d\n", pick_buffer[i + 2]);
+        for (int j = 0; j < n_items; ++j) {
+            printf("- item %d\n", pick_buffer[3 + j]);
+        }
+    }
+    printf("\n");
+
+    return 234;
+}
+

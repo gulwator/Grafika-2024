@@ -58,4 +58,6 @@ void render_app(App* app);
  */
 void destroy_app(App* app);
 
+void pick_test(App* app);
+
 #endif /* APP_H */
