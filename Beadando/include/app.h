@@ -22,6 +22,7 @@ typedef struct App
     int appWidth;
     int appHeight;
     bool fog;
+    int selected_structure;
 } App;
 
 /**

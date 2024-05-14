@@ -228,7 +228,7 @@ void render_scene(const Scene* scene)
         glPushMatrix();
         
         glTranslatef(i*25, j*25,0);
-        printf(" structure x: %d, y: %d\n", i*25,j*25);
+        // printf(" structure x: %d, y: %d\n", i*25,j*25);
         // draw_Circle(i*25,j*25,0,25*scene->map[i][j].radius);
         //DRAW MAP 
         switch (scene->map[i][j].structure)

@@ -13,6 +13,7 @@ void init_app(App* app, int width, int height)
     app->appHeight=height;
     app->is_running = false;
     app->fog = false;
+    app->selected_structure=0;
 
     error_code = SDL_Init(SDL_INIT_EVERYTHING);
     if (error_code != 0) {
@@ -72,7 +73,7 @@ void init_opengl()
     glClearDepth(1.0);
 
     glEnable(GL_TEXTURE_2D);
-    glEnable(GL_FOG);
+    glDisable(GL_FOG);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
@@ -146,15 +147,17 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), -15);
                 break;
+            case SDL_SCANCODE_0:
+                            app->selected_structure=0;
+                             printf("%d \n", app->selected_structure);
+                            break;    
             case SDL_SCANCODE_1:
-                            // if (/* condition */)
-                            // {
-                            //     /* code */
-                            // }
-                            
+                            app->selected_structure=1;
+                            printf("%d\n", app->selected_structure);
                             break;
             case SDL_SCANCODE_2:
-                            set_camera_side_speed(&(app->camera), -15);
+                            app->selected_structure=2;
+                            printf("%d\n", app->selected_structure);
                             break;
             case SDL_SCANCODE_E:
                 printf("E nyomódott\n");
