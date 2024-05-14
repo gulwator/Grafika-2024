@@ -1,5 +1,5 @@
 #include "app.h"
-
+#include <stdbool.h>
 #include <SDL2/SDL_image.h>
 #define PICK_BUFFER_SIZE 256
 
@@ -11,6 +11,7 @@ void init_app(App* app, int width, int height)
     app->appWidth=width;
     app->appHeight=height;
     app->is_running = false;
+    app->fog = false;
 
     error_code = SDL_Init(SDL_INIT_EVERYTHING);
     if (error_code != 0) {
@@ -60,7 +61,7 @@ void init_opengl()
     glEnable(GL_NORMALIZE);
     glEnable(GL_AUTO_NORMAL);
 
-    glClearColor(0.1, 0.1, 0.1, 1.0);
+    glClearColor(0.9, 0.9, 0.9, 1.0);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -70,7 +71,7 @@ void init_opengl()
     glClearDepth(1.0);
 
     glEnable(GL_TEXTURE_2D);
-    // glEnable(GL_FOG);
+    glEnable(GL_FOG);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
@@ -117,11 +118,13 @@ void handle_app_events(App* app)
     double zoom;
     int appWidth = app->appWidth;
     int appHeight = app->appHeight;
-    // bool fog = false;
-    // float fog_start = 0;
-    //                 float density= 1.0;
-    //                 glFogfv(GL_FOG_DENSITY, &density);
-    //                 glFogfv(GL_FOG_START, &fog_start);
+    
+    float fog_start = 0.0005;       //0.0005
+    float fog_end = 1;              //1
+    float density= .01;             //0.01
+    glFogfv(GL_FOG_DENSITY, &density);
+    glFogfv(GL_FOG_START, &fog_start);
+    glFogfv(GL_FOG_END, &fog_end);
 
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -142,24 +145,31 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_D:
                 set_camera_side_speed(&(app->camera), -15);
                 break;
+            case SDL_SCANCODE_1:
+                            if (/* condition */)
+                            {
+                                /* code */
+                            }
+                            
+                            break;
+            case SDL_SCANCODE_2:
+                            set_camera_side_speed(&(app->camera), -15);
+                            break;
             case SDL_SCANCODE_E:
-                // printf("%f", fogstart);
-                
-                // fog= !fog;
-                    
-                // if (fog)
-                // {
-                    
-                //     float fog_color[] = {1, 1, 1, 1};
-                //     glFogfv(GL_FOG_COLOR, fog_color);/* code */
-                // }
-                // else{
-                    
-                //     float fog_color[] = {0, 0, 0, 0};
-                //     glFogfv(GL_FOG_COLOR, fog_color);
-                // }
-                
-                
+                printf("E nyomódott\n");
+
+                printf("fog is: %s \n", app->fog ? "true" : "false");
+                app->fog = !app->fog;
+                printf("fog is: %s \n", app->fog ? "true" : "false");
+                if (app->fog)
+                {
+                    glEnable(GL_FOG);
+                     float fog_color[] = {0.9, 0.9, 0.9, 0.9};
+                    glFogfv(GL_FOG_COLOR, fog_color);
+                }
+                else{
+                    glDisable(GL_FOG);
+                }
                 break;
             default:
                 break;

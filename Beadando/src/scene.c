@@ -64,13 +64,13 @@ for (int x = 0; x < MAP_WIDTH ; x++)
 {
     for (int y = 0; y < MAP_HEIGHT; y++)
     {
-        //  scene->map[x][y].structure=rand() % (2 + 1 - 0) + 0;
-        if(x==y && x<2){
-            scene->map[x][y].structure=1;
-        }else{
-            scene->map[x][y].structure=0;
-        }
-
+        //   scene->map[x][y].structure=rand() % (2 + 1 - 0) + 0;
+        // if(x==y && x<2){
+        //     scene->map[x][y].structure=1;
+        // }else{
+        //     scene->map[x][y].structure=0;
+        // }
+        scene->map[x][y].structure=0;
 
         switch (scene->map[x][y].structure)
         {
@@ -201,27 +201,6 @@ void update_scene(Scene* scene, double elapsed_time)
                         }
                     }
                 }
-                // printf("\n\n");
-                
-                
-                
-                // if (distance<0)
-                // {
-                //     // printf("cube %d is in the circle\n",i);
-                //     // scene->cubes[i].bonus= scene->cubes[i].bonus+1;
-                //     // printf("cube %d  current bonus: %d\n",i,scene->cubes[i].bonus);
-                //     // update_plot(scene->cubes[i]);
-                // }
-            //TODO: ha a távolság rendben, megnézzük ott milyen épület van
-            //TODO: update-eljük színt    
-
-
-
-
-
-
-
-
             }
                 // printf("%d ,%d koordinátának %d bunusza van\n",x,y,scene->map[x][y].bonus);
         }
@@ -293,31 +272,15 @@ void render_scene(const Scene* scene)
         default:
             break;
         }
-                // printf("%d ,%d  koordinátán  %d bonustz van\n", i,j, scene->map[i][j].bonus);
         
 
 
 
         glPopMatrix();
-        
-        
-            /* code */
         }   /* code */
     
     }
-    // for (int i = 0; i < 9; i++)
-    // {
-    //     glPushMatrix();
-    //     glTranslatef(0.55+i*1.1,-0.45,-0.45) ;
-    //     glScalef(0.1,0.1,0.1);
-    //     draw_model(&(scene->cube));
-    //     glPopMatrix();    /* code */
-    // }
-    
-    
-    
-    
-    
+      
 }
 
 
@@ -424,6 +387,17 @@ unsigned int find_object_on_scene(const Scene* scene, int x, int y)
         }
     }
     printf("\n");
+
+     for (int i = 0; i < MAP_WIDTH; i++) {
+        for (int j = 0; j < MAP_HEIGHT; j++) {
+            // Ellenőrizd, hogy az adott térképrács a megadott koordinátákra esik-e
+            if (i * 25 == x && j * 25 == y) {
+                // Ha igen, akkor térj vissza az objektum nevével
+                
+                printf("%d \n",scene->map[i][j].structure) ;
+            }
+        }
+    }
 
     return 234;
 }

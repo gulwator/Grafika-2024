@@ -21,6 +21,7 @@ typedef struct App
     Scene scene;
     int appWidth;
     int appHeight;
+    bool fog;
 } App;
 
 /**

@@ -23,6 +23,12 @@ enum ObjectName {
     BLUE_CUBE
 };
 
+typedef struct ObjectPosition{
+    float x;
+    float y;
+    float z;
+} ObjectPosition;
+
 /**
  * Initialize the scene by loading models.
  */

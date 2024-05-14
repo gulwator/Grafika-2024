@@ -32,7 +32,7 @@ void update_camera(Camera* camera, double time)
     camera->position.x += cos(side_angle) * camera->speed.x * time;
     camera->position.y += sin(side_angle) * camera->speed.x * time;
 
-    //  printf("position:  %f, %f, %f \n", camera->position.x,camera->position.y,camera->position.z);
+    // printf("position:  %f, %f, %f \n", camera->position.x,camera->position.y,camera->position.z);
     //  printf("rotation: %f, %f, %f \n", camera->rotation.x,camera->rotation.y,camera->rotation.z);
 }
 

@@ -6,9 +6,10 @@
 #include "blocks.h"
 #include "utils.h"
 #include <obj/model.h>
+#include <stdbool.h>
 
-#define MAP_WIDTH 4
-#define MAP_HEIGHT  4
+#define MAP_WIDTH 10
+#define MAP_HEIGHT  10
 #define GRID_SOMETHING 25
 
 typedef struct Scene
@@ -23,6 +24,7 @@ typedef struct Scene
     double rotation;
     Plot map[MAP_WIDTH][MAP_HEIGHT];
     Color effect_colors[7];
+    
     
 } Scene;
 
