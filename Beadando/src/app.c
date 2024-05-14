@@ -1,5 +1,6 @@
 #include "app.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <SDL2/SDL_image.h>
 #define PICK_BUFFER_SIZE 256
 
@@ -146,10 +147,10 @@ void handle_app_events(App* app)
                 set_camera_side_speed(&(app->camera), -15);
                 break;
             case SDL_SCANCODE_1:
-                            if (/* condition */)
-                            {
-                                /* code */
-                            }
+                            // if (/* condition */)
+                            // {
+                            //     /* code */
+                            // }
                             
                             break;
             case SDL_SCANCODE_2:

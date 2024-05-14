@@ -1,8 +1,10 @@
 #include "scene.h"
 #include "math.h"
 #include "blocks.h"
+
 #include <obj/load.h>
 #include <obj/draw.h>
+#include <GL/glu.h>
 #include <stdio.h>
 
 #define PICK_BUFFER_SIZE 256
@@ -226,6 +228,7 @@ void render_scene(const Scene* scene)
         glPushMatrix();
         
         glTranslatef(i*25, j*25,0);
+        printf(" structure x: %d, y: %d\n", i*25,j*25);
         // draw_Circle(i*25,j*25,0,25*scene->map[i][j].radius);
         //DRAW MAP 
         switch (scene->map[i][j].structure)
@@ -344,7 +347,6 @@ void draw_Moon_circle( double x, double y, double z, double radius){
 //  glPopMatrix();
  glEnd();
 }
-
 unsigned int find_object_on_scene(const Scene* scene, int x, int y)
 {
     unsigned int pick_buffer[PICK_BUFFER_SIZE];
@@ -385,19 +387,25 @@ unsigned int find_object_on_scene(const Scene* scene, int x, int y)
         for (int j = 0; j < n_items; ++j) {
             printf("- item %d\n", pick_buffer[3 + j]);
         }
+        // A kattintási pont helyzetének visszaszerzése a térben
+        GLint viewport[4];
+        GLdouble modelview[16], projection[16];
+        GLfloat winX, winY, winZ;
+        GLdouble posX, posY, posZ;
+
+        glGetDoublev(GL_MODELVIEW_MATRIX, modelview);
+        glGetDoublev(GL_PROJECTION_MATRIX, projection);
+        glGetIntegerv(GL_VIEWPORT, viewport);
+
+        winX = (float)x;
+        winY = (float)viewport[3] - (float)y;
+        glReadPixels(x, (GLint)winY, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &winZ);
+
+        gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
+
+        printf("Object position: (%f, %f, %f)\n", posX, posY, posZ);
     }
     printf("\n");
-
-     for (int i = 0; i < MAP_WIDTH; i++) {
-        for (int j = 0; j < MAP_HEIGHT; j++) {
-            // Ellenőrizd, hogy az adott térképrács a megadott koordinátákra esik-e
-            if (i * 25 == x && j * 25 == y) {
-                // Ha igen, akkor térj vissza az objektum nevével
-                
-                printf("%d \n",scene->map[i][j].structure) ;
-            }
-        }
-    }
 
     return 234;
 }
