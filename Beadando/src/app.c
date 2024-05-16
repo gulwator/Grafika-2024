@@ -1,4 +1,5 @@
 #include "app.h"
+#include "scene.h"
 #include <stdbool.h>
 #include <stdio.h>
 #include <SDL2/SDL_image.h>
@@ -120,10 +121,12 @@ void handle_app_events(App* app)
     double zoom;
     int appWidth = app->appWidth;
     int appHeight = app->appHeight;
+    int world_x=0; 
+    int world_y=0;
     
     float fog_start = 0.0005;       //0.0005
     float fog_end = 1;              //1
-    float density= .01;             //0.01
+    float density= 0.01;             //0.01
     glFogfv(GL_FOG_DENSITY, &density);
     glFogfv(GL_FOG_START, &fog_start);
     glFogfv(GL_FOG_END, &fog_end);
@@ -149,22 +152,22 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_0:
                             app->selected_structure=0;
-                             printf("%d \n", app->selected_structure);
+                            //  printf("%d \n", app->selected_structure);
                             break;    
             case SDL_SCANCODE_1:
                             app->selected_structure=1;
-                            printf("%d\n", app->selected_structure);
+                            // printf("%d\n", app->selected_structure);
                             break;
             case SDL_SCANCODE_2:
                             app->selected_structure=2;
-                            printf("%d\n", app->selected_structure);
+                            // printf("%d\n", app->selected_structure);
                             break;
             case SDL_SCANCODE_E:
-                printf("E nyomódott\n");
+                // printf("E nyomódott\n");
 
-                printf("fog is: %s \n", app->fog ? "true" : "false");
+                // printf("fog is: %s \n", app->fog ? "true" : "false");
                 app->fog = !app->fog;
-                printf("fog is: %s \n", app->fog ? "true" : "false");
+                // printf("fog is: %s \n", app->fog ? "true" : "false");
                 if (app->fog)
                 {
                     glEnable(GL_FOG);
@@ -198,10 +201,15 @@ void handle_app_events(App* app)
                 is_mouse_down = true;
             } else if (event.button.button == SDL_BUTTON_RIGHT) {
                 SDL_GetMouseState(&x, &y);
-                printf("Pick object at (%d, %d):\n", x, y);
+                // printf("Pick object at (%d, %d):\n", x, y);
                 pick_test(app);
-                unsigned int object_name = find_object_on_scene(&(app->scene), x, y);
-                printf("Picked object name: %u\n", object_name);
+                
+                find_object_on_scene(&(app->scene), x, y, &world_x, &world_y);
+                // unsigned int object_name = find_object_on_scene(&(app->scene), x, y);
+                //  printf("Picked object name: %u\n", object_name);
+                printf("return of find object: x: %d, y:%d \n", world_x, world_y);
+                update_map(&(app->scene), world_x, world_y, app->selected_structure);
+
             }
             break;
         case SDL_MOUSEMOTION:
@@ -301,7 +309,7 @@ void destroy_app(App* app)
 
 void pick_test(App* app)
 {
-    printf("Pick test ...\n");
+    // printf("Pick test ...\n");
 
     unsigned int pick_buffer[PICK_BUFFER_SIZE];
     glSelectBuffer(PICK_BUFFER_SIZE, pick_buffer);
@@ -319,6 +327,6 @@ void pick_test(App* app)
     glPopMatrix();
 
     GLint n_hits = glRenderMode(GL_RENDER);
-    printf("Number of hits: %d\n", n_hits);
+    // printf("Number of hits: %d\n", n_hits);
 }
 

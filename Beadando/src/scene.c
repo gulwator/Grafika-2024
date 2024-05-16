@@ -7,6 +7,7 @@
 #include <GL/glu.h>
 #include <stdio.h>
 
+
 #define PICK_BUFFER_SIZE 256
 
 void init_scene(Scene* scene)
@@ -46,7 +47,7 @@ void init_scene(Scene* scene)
     load_model(&(scene->factoryPlot), "assets/models/factoryBlockTM.obj");
     load_model(&(scene->sphere), "assets/models/sphere.obj");
     // scene->texture_id = load_texture("assets/textures/cube.png");
-
+    init_map(scene);
     // glBindTexture(GL_TEXTURE_2D, scene->texture_id);
 
     // scene->material.ambient.red = 0.0;
@@ -62,66 +63,7 @@ void init_scene(Scene* scene)
     // scene->material.specular.blue = 0.0;
 
     // scene->material.shininess = 0.0;
-for (int x = 0; x < MAP_WIDTH ; x++)
-{
-    for (int y = 0; y < MAP_HEIGHT; y++)
-    {
-        //   scene->map[x][y].structure=rand() % (2 + 1 - 0) + 0;
-        // if(x==y && x<2){
-        //     scene->map[x][y].structure=1;
-        // }else{
-        //     scene->map[x][y].structure=0;
-        // }
-        scene->map[x][y].structure=0;
 
-        switch (scene->map[x][y].structure)
-        {
-        case 0:
-        scene->map[x][y].bonus=0;
-        scene->map[x][y].effect=0;
-        scene->map[x][y].radius=0;
-        break;
-        case 1:
-            scene->map[x][y].bonus=5;
-            scene->map[x][y].effect=1;
-            scene->map[x][y].radius=1;
-        break;
-        case 2:
-            scene->map[x][y].bonus=-5;
-            scene->map[x][y].effect=-1;
-            scene->map[x][y].radius=1;
-        break;
-                
-        default:
-            break;
-        }
-        
-        
-        
-        // if (x==y)
-        // {
-        //     scene->map[x][y].structure=1;
-        //     scene->map[x][y].effect=1;
-        // scene->map[x][y].radius=1;
-            
-        // }
-        // if ((x+y)== 4)
-        // {
-            
-        //     scene->map[x][y].structure=2; 
-        //     scene->map[x][y].effect=-1;
-        // scene->map[x][y].radius=1;
-        // }
-        
-        
-    }
-    
-}
-
-
-
-
-    
 }
 
 void set_lighting()
@@ -347,8 +289,9 @@ void draw_Moon_circle( double x, double y, double z, double radius){
 //  glPopMatrix();
  glEnd();
 }
-unsigned int find_object_on_scene(const Scene* scene, int x, int y)
+void find_object_on_scene(const Scene* scene, int x, int y, int* world_x, int* world_y)
 {
+    
     unsigned int pick_buffer[PICK_BUFFER_SIZE];
 
     glSelectBuffer(PICK_BUFFER_SIZE, pick_buffer);
@@ -372,22 +315,22 @@ unsigned int find_object_on_scene(const Scene* scene, int x, int y)
 
     GLint depth;
     glGetIntegerv(GL_NAME_STACK_DEPTH, &depth);
-    printf("Depth: %d\n", depth);
+    // printf("Depth: %d\n", depth);
 
     GLint n_hits = glRenderMode(GL_RENDER);
-    printf("Number of hits: %d\n", n_hits);
+    // printf("Number of hits: %d\n", n_hits);
 
     for (int i = 0; i < n_hits; ++i) {
         int n_items = pick_buffer[i + 0];
-        printf("----\n");
-        printf("Hit %d\n", i);
-        printf("nitems : %d\n", n_items);
-        printf("zmin   : %d\n", pick_buffer[i + 1]);
-        printf("zmax   : %d\n", pick_buffer[i + 2]);
+        // printf("----\n");
+        // printf("Hit %d\n", i);
+        // printf("nitems : %d\n", n_items);
+        // printf("zmin   : %d\n", pick_buffer[i + 1]);
+        // printf("zmax   : %d\n", pick_buffer[i + 2]);
         for (int j = 0; j < n_items; ++j) {
-            printf("- item %d\n", pick_buffer[3 + j]);
+            // printf("- item %d\n", pick_buffer[3 + j]);
         }
-        // A kattintási pont helyzetének visszaszerzése a térben
+        // get the point in the world
         GLint viewport[4];
         GLdouble modelview[16], projection[16];
         GLfloat winX, winY, winZ;
@@ -404,9 +347,77 @@ unsigned int find_object_on_scene(const Scene* scene, int x, int y)
         gluUnProject(winX, winY, winZ, modelview, projection, viewport, &posX, &posY, &posZ);
 
         printf("Object position: (%f, %f, %f)\n", posX, posY, posZ);
+        *world_x=(int)round(posX /25);
+        *world_y=(int)round(posY /25);
+        
+        printf("Place in Map: %d, %d\n",world_x,world_y);
+        
     }
     printf("\n");
 
-    return 234;
+}
+void init_map(Scene* scene){
+    for (int x = 0; x < MAP_WIDTH ; x++)
+{
+    for (int y = 0; y < MAP_HEIGHT; y++)
+    {
+        //   scene->map[x][y].structure=rand() % (2 + 1 - 0) + 0;
+        // if(x==y && x<2){
+        //     scene->map[x][y].structure=1;
+        // }else{
+        //     scene->map[x][y].structure=0;
+        // }
+        scene->map[x][y].structure=0;
+
+        switch (scene->map[x][y].structure)
+        {
+        case 0:
+        scene->map[x][y].bonus=0;
+        scene->map[x][y].effect=0;
+        scene->map[x][y].radius=0;
+        break;
+        case 1:
+            scene->map[x][y].bonus=5;
+            scene->map[x][y].effect=1;
+            scene->map[x][y].radius=1;
+        break;
+        case 2:
+            scene->map[x][y].bonus=-5;
+            scene->map[x][y].effect=-1;
+            scene->map[x][y].radius=1;
+        break;
+                
+        default:
+            break;
+        }
+        
+        
+        
+        if (x==y)
+        {
+            scene->map[x][y].structure=1;
+            scene->map[x][y].effect=1;
+        scene->map[x][y].radius=1;
+            
+        }
+        if ((x+y)== 4)
+        {
+            
+            scene->map[x][y].structure=2; 
+            scene->map[x][y].effect=-1;
+        scene->map[x][y].radius=1;
+        }
+        
+        
+    }
+    
+}
+
+
+}
+void update_map(Scene* scene, int world_x, int world_y, int structure_type){
+    printf(" %d, %d strukturaja: %d volt\n", world_x, world_y, scene->map[world_x][world_y].structure);
+    scene->map[world_x][world_y].structure=structure_type;
+    printf(" %d, %d strukturaja: %d lett\n", world_x, world_y, structure_type);
 }
 
