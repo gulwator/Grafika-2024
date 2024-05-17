@@ -73,7 +73,7 @@ void init_opengl()
 
     glClearDepth(1.0);
 
-    glEnable(GL_TEXTURE_2D);
+    // glEnable(GL_TEXTURE_2D);
     glDisable(GL_FOG);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -184,6 +184,22 @@ void handle_app_events(App* app)
                     glDisable(GL_FOG);
                 }
                 break;
+            case SDL_SCANCODE_F1:
+            printf("Help pressed\n");
+                if(!app->scene.Help_visible) {
+                app->scene.Help_visible = true;
+                
+                }else{
+                   
+                app->scene.Help_visible = false;
+				glFrustum(
+				-.08, .08,
+				-.06, .06,
+				.1, 6000
+				);
+                }   
+
+
             default:
                 break;
             }
@@ -296,6 +312,9 @@ void render_app(App* app)
     if (app->camera.is_preview_visible) {
         show_texture_preview();
     }
+    if (app->scene.Help_visible){
+        Help(app->scene.Help_menu);
+	}
 
     SDL_GL_SwapWindow(app->window);
 }

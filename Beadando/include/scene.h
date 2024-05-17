@@ -25,6 +25,9 @@ typedef struct Scene
     Plot map[MAP_WIDTH][MAP_HEIGHT];
     Color effect_colors[7];
     
+GLuint Help_menu;
+bool Help_visible;
+
     
 } Scene;
 

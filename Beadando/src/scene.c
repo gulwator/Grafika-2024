@@ -12,43 +12,48 @@
 
 void init_scene(Scene* scene)
 {
-    scene->effect_colors[0].red=0.8;
-    scene->effect_colors[0].green=0.2;
-    scene->effect_colors[0].blue=0.2;
+    scene->effect_colors[0].red = 0.8;
+    scene->effect_colors[0].green = 0.2;
+    scene->effect_colors[0].blue = 0.2;
 
-    scene->effect_colors[1].red=0.7;
-    scene->effect_colors[1].green=0.3;
-    scene->effect_colors[1].blue=0.3;
-    
-    scene->effect_colors[2].red=0.6;
-    scene->effect_colors[2].green=0.4;
-    scene->effect_colors[2].blue=0.4;
-    
-    scene->effect_colors[3].red=0.5;
-    scene->effect_colors[3].green=0.5;
-    scene->effect_colors[3].blue=0.5;
-    
-    scene->effect_colors[4].red=0.4;
-    scene->effect_colors[4].green=0.6;
-    scene->effect_colors[4].blue=0.4;
-    
-    scene->effect_colors[5].red=0.3;
-    scene->effect_colors[5].green=0.7;
-    scene->effect_colors[5].blue=0.3;
-    
-    scene->effect_colors[6].red=0.2;
-    scene->effect_colors[6].green=0.8;
-    scene->effect_colors[6].blue=0.2;
+    scene->effect_colors[1].red = 0.7;
+    scene->effect_colors[1].green = 0.3;
+    scene->effect_colors[1].blue = 0.3;
 
-    scene->rotation =0;
+    scene->effect_colors[2].red = 0.6;
+    scene->effect_colors[2].green = 0.4;
+    scene->effect_colors[2].blue = 0.4;
+
+    scene->effect_colors[3].red = 0.5;
+    scene->effect_colors[3].green = 0.5;
+    scene->effect_colors[3].blue = 0.5;
+
+    scene->effect_colors[4].red = 0.4;
+    scene->effect_colors[4].green = 0.6;
+    scene->effect_colors[4].blue = 0.4;
+
+    scene->effect_colors[5].red = 0.3;
+    scene->effect_colors[5].green = 0.7;
+    scene->effect_colors[5].blue = 0.3;
+
+    scene->effect_colors[6].red = 0.2;
+    scene->effect_colors[6].green = 0.8;
+    scene->effect_colors[6].blue = 0.2;
+
+ 
+    scene->rotation = 0;
     load_model(&(scene->cube), "assets/models/cube.obj");
     load_model(&(scene->cityPlot), "assets/models/houseBlockTM.obj");
     load_model(&(scene->templePlot), "assets/models/templeBlockTM.obj");
     load_model(&(scene->factoryPlot), "assets/models/factoryBlockTM.obj");
     load_model(&(scene->sphere), "assets/models/sphere.obj");
-    // scene->texture_id = load_texture("assets/textures/cube.png");
+
+  
     init_map(scene);
-    // glBindTexture(GL_TEXTURE_2D, scene->texture_id);
+
+  
+    scene->Help_menu = load_texture("assets/textures/help_texture.jpg");
+    scene->Help_visible = false;
 
     // scene->material.ambient.red = 0.0;
     // scene->material.ambient.green = 0.0;
@@ -157,6 +162,10 @@ void update_scene(Scene* scene, double elapsed_time)
 void render_scene(const Scene* scene)
 {
     
+glDisable(GL_TEXTURE_2D);
+glColor3f(1.0, 1.0, 1.0); // Fehér szín visszaállítása
+glEnable(GL_COLOR_MATERIAL);
+
     // set_material(&(scene->material));
     set_lighting();
     draw_origin();
@@ -169,6 +178,7 @@ void render_scene(const Scene* scene)
         
         glPushMatrix();
         
+    
         glTranslatef(i*25, j*25,0);
         // printf(" structure x: %d, y: %d\n", i*25,j*25);
         // draw_Circle(i*25,j*25,0,25*scene->map[i][j].radius);
@@ -251,6 +261,41 @@ void draw_origin()
     glEnd();
 }
 
+void Help(GLuint Help_menu) 
+{
+
+     glEnable(GL_TEXTURE_2D);
+       
+        
+        glDisable(GL_CULL_FACE);
+        glDisable(GL_LIGHTING);
+        glDisable(GL_DEPTH_TEST);
+        glEnable(GL_COLOR_MATERIAL);
+
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+
+        glColor3f(1, 1, 1);
+        glBindTexture(GL_TEXTURE_2D, Help_menu);
+
+        glBegin(GL_QUADS);
+        glTexCoord2f(0, 0);
+        glVertex3d(-2, 1.5, -3);
+        glTexCoord2f(1, 0);
+        glVertex3d(2, 1.5, -3);
+        glTexCoord2f(1, 1);
+        glVertex3d(2, -1.5, -3);
+        glTexCoord2f(0, 1);
+        glVertex3d(-2, -1.5, -3);
+        glEnd();
+
+
+        glDisable(GL_COLOR_MATERIAL);
+        glEnable(GL_LIGHTING);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glDisable(GL_TEXTURE_2D);
+}
 
 void draw_Circle( double x, double y, double z, double radius){
 
