@@ -138,6 +138,12 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_ESCAPE:
                 app->is_running = false;
                 break;
+                 case SDL_SCANCODE_F12:
+                SDL_SetWindowBrightness(app->window, SDL_GetWindowBrightness(app->window) + 0.1);
+                break;
+            case SDL_SCANCODE_F11:
+                SDL_SetWindowBrightness(app->window, SDL_GetWindowBrightness(app->window) - 0.1);
+                break;
             case SDL_SCANCODE_W:
                 set_camera_speed(&(app->camera), 15);
                 break;
